@@ -68,6 +68,19 @@ library(emmeans)
 ################################################################################
 
 
+
+# To assess whether there was any bias in our data due to the different number 
+# of sampled individuals per species, we developed a resampling protocol to 
+# randomly sample four individuals from each species and calculated the mean 
+# temperature for each one of the nine measured timepoints (morning, midday and
+# evening each day), and isotope values (δ13C and δ15N). For each species, one 
+# thousand resampling iterations were performed. A t-test was employed to compare
+# the original mean values for each variable with the corresponding resampled
+# means for each species. Since there were
+# no differences, all the subsequent analyses only used the original values. 
+
+
+
 # Split the data into different species to handle separately
 holocron_A_arg <- holocron %>% filter(Spp == "A_arg")
 holocron_L_arg <- holocron %>% filter(Spp == "L_arg")
@@ -607,7 +620,25 @@ ggplot(resampling_results, aes(x = I15N_mean, fill = Spp)) +
 
 
 
-
+# Because variance analysis assumes data independence, we assessed whether the
+# trophic and thermal niches of individual species were spatially autocorrelated.
+# To achieve this, we calculated Moran’s I statistic using the ape package
+# (Paradis & Schliep 2019), which allowed us to assess the extent to which
+# individuals with similar niches are spatially clustered. Specifically, we
+# tested spatial autocorrelation for: (i) average temperature (the average of
+# all recorded temperatures for each individual); (ii) temperature width
+# (difference between the recorded minimum and maximum temperature); (iii) δ13C;
+# and (iv) δ15N.  To assess whether the measured variables influenced the
+# thermal and trophic niches, we then applied Generalized Least Squares (GLS)
+# models using the nlme package (Pinheiro et al. 2017). Given the significant
+# spatial autocorrelation detected for average temperature and δ13C, we
+# incorporated proximity matrices into the models to account for spatial
+# autocorrelation. These models were created with either average temperature,
+# temperature width, δ13C, or δ15N as response variables, and species
+# identity, body size and their interaction as predictors. If an interaction
+# between predictors was found to be significant, we then tested for pairwise
+# differences using Tukey-adjusted pairwise contrasts, using the
+# emmeans package (Lenth 2025).
 
 
 
@@ -1602,7 +1633,17 @@ ggplot(species_summary) +
 ################################################################################
 
 
-
+# To explore the potential covariation between body temperature, stable isotope
+# values, and spatial position, we conducted three different Mantel tests
+# (accounting for each pairwise combination of variables) using the R package
+# ecodist (Goslee & Urban 2007). Three Euclidean distance matrices were
+# generated: a thermal matrix (based on individual temperature records), a
+# trophic matrix (using δ13C and δ15N values for all individuals), and a
+# spatial matrix (derived from the geographic coordinates of all individuals).
+# The statistical significance of all Mantel tests was obtained by comparing
+# the Euclidean distance matrices of each factor with 10,000 random permutations
+# of the arrangement of the cells within these matrices, assessing significant
+# differences from zero through Spearman correlations.
 
 
 #Select the interest variables
