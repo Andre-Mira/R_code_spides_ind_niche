@@ -1,10 +1,22 @@
 # R_code_spides_ind_niche
-R code for "Contrasting spatial signatures of thermal and trophic individual-level niches in a community of tropical spiders"
+In the folder, there are two R codes used in "Contrasting spatial signatures of thermal and trophic individual-level niches in a community of tropical spiders" ("T_test.R" and "Spiders_var.R") and an RDS.file
 
 # README: Thermal and Trophic Niches Analysis
 
 ## Overview
 This project analyzes the thermal and trophic niches of individual species, assessing spatial autocorrelation and applying Generalized Least Squares (GLS) models to account for spatial dependencies.
+
+------
+
+# File "T-test.R"
+
+This file contains the resampling protocol used. The code is written in a way that creates an RDS file to allow reproduction of the previously obtained results. If the code is run with the RDS file in the directory, it will replicate the same sampling indices, ensuring that all resampled datasets, statistical tests, and conclusions remain identical across runs. If the RDS file is not present in the directory, it will generate new random sampling indices based on the specified parameters, save them as a new RDS file.
+
+------
+
+# File "Spiders_var.R"
+
+This file contains the code used to obtained the results. More below.
 
 ## Testing the Variables
 Because variance analysis assumes data independence, we assessed whether the trophic and thermal niches of individual species were spatially autocorrelated. We used Moran’s I statistic via the `ape` package to determine if individuals with similar niches are spatially clustered.
